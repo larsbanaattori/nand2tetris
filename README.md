@@ -2,16 +2,16 @@
 
 - [x] Download everything
 - [x] Set up git repo
-- [ ] Install HW simulator
-- [ ] Figure out how the HW simulator works
+- [x] Install HW simulator
+- [x] Figure out how the HW simulator works
 - [ ] Do and test the logic gates
-  - [ ] Single bit versions
-    - [ ] NOT
-    - [ ] AND
-    - [ ] OR
-    - [ ] XOR
-    - [ ] MUX
-    - [ ] DMUX
+  - [x] Single bit versions
+    - [x] NOT
+    - [x] AND
+    - [x] OR
+    - [x] XOR
+    - [x] MUX
+    - [x] DMUX
   - [ ] Multi-bit versions
     - [ ] NOT16
     - [ ] AND16
