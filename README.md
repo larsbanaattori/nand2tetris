@@ -1,0 +1,25 @@
+# nand2tetris
+
+- [x] Download everything
+- [x] Set up git repo
+- [ ] Install HW simulator
+- [ ] Figure out how the HW simulator works
+- [ ] Do and test the logic gates
+  - [ ] Single bit versions
+    - [ ] NOT
+    - [ ] AND
+    - [ ] OR
+    - [ ] XOR
+    - [ ] MUX
+    - [ ] DMUX
+  - [ ] Multi-bit versions
+    - [ ] NOT16
+    - [ ] AND16
+    - [ ] OR16
+    - [ ] MUX16
+  - [ ] Multi-way versions
+    - [ ] OR8WAY
+    - [ ] MUX4WAY16
+    - [ ] MUX8WAY16
+    - [ ] DMUX4WAY
+    - [ ] DMUX8WAY
