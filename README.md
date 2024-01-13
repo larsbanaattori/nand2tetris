@@ -1,6 +1,10 @@
 # nand2tetris
 
-## p0 - logic gates - done
+## p0 - done
+
+nothing needs to be done. only for Coursera students :)
+
+## p1 - logic gates - done
 
 - [x] Download everything
 - [x] Set up git repo
@@ -26,6 +30,16 @@
     - [x] DMUX4WAY
     - [x] DMUX8WAY
 
-## p1 - tbd
+## p2 - ALU - done
+
+- [x] Read the chapter from book
+- [x] Do and test following chips
+  - [x] HalfAdder: adds two bits
+  - [x] FullAdder: adds three bits
+  - [x] Add16: adds two 16-bit numbers
+  - [x] Inc16: adds 1 to a 16-bit number *in an efficient manner*
+  - [x] ALU: the arithmetic logic unit
+
+## p3 - memory - tbd
 
 - [ ] Read the chapter from book
