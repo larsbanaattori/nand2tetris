@@ -10,7 +10,7 @@ nothing needs to be done. only for Coursera students :)
 - [x] Set up git repo
 - [x] Install HW simulator
 - [x] Figure out how the HW simulator works
-- [x] Do and test the logic gates
+- [x] Build and test the logic gates
   - [x] Single bit versions
     - [x] NOT
     - [x] AND
@@ -33,7 +33,7 @@ nothing needs to be done. only for Coursera students :)
 ## p2 - ALU - done
 
 - [x] Read the chapter from book
-- [x] Do and test following chips
+- [x] Build and test following chips
   - [x] HalfAdder: adds two bits
   - [x] FullAdder: adds three bits
   - [x] Add16: adds two 16-bit numbers
@@ -42,4 +42,12 @@ nothing needs to be done. only for Coursera students :)
 
 ## p3 - memory - tbd
 
-- [ ] Read the chapter from book
+- [x] Read the chapter from book
+- [ ] Build and test following chips
+  - [ ] Register
+  - [ ] RAM8
+  - [ ] RAM64
+  - [ ] RAM512
+  - [ ] RAM4K
+  - [ ] RAM16K
+  - [ ] Counter
