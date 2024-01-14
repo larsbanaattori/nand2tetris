@@ -53,9 +53,15 @@ nothing needs to be done. only for Coursera students :)
   - [x] RAM16K
   - [x] PC (counter)
 
-## p4 - machine language - tbd
+## p4 - machine language - done
 
 - [x] Read the chapter from book
-- [ ] Write and test two programs in .asm (assembly language)
-  - [ ] mult (multiplication)
-  - [ ] fill (filling the screen)
+- [x] Write and test two programs in .asm (assembly language)
+  - [x] mult (multiplication)
+  - [x] fill (filling the screen)
+
+## p5 - computer - tbd
+
+- [ ] Read the chapter from book
+- [ ] Build the Hack computer!
+ 
