@@ -40,14 +40,19 @@ nothing needs to be done. only for Coursera students :)
   - [x] Inc16: adds 1 to a 16-bit number *in an efficient manner*
   - [x] ALU: the arithmetic logic unit
 
-## p3 - memory - tbd
+## p3 - memory - done
 
 - [x] Read the chapter from book
-- [ ] Build and test following chips
-  - [ ] Register
-  - [ ] RAM8
-  - [ ] RAM64
-  - [ ] RAM512
-  - [ ] RAM4K
-  - [ ] RAM16K
-  - [ ] Counter
+- [x] Build and test following chips
+  - [x] BIT
+  - [x] Register
+  - [x] RAM8
+  - [x] RAM64
+  - [x] RAM512
+  - [x] RAM4K
+  - [x] RAM16K
+  - [x] PC (counter)
+
+## p4 - machine language - tbd
+
+- [ ] Read the chapter from book
