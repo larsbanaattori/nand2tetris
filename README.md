@@ -55,4 +55,7 @@ nothing needs to be done. only for Coursera students :)
 
 ## p4 - machine language - tbd
 
-- [ ] Read the chapter from book
+- [x] Read the chapter from book
+- [ ] Write and test two programs in .asm (assembly language)
+  - [ ] mult (multiplication)
+  - [ ] fill (filling the screen)
