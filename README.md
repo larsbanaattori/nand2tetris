@@ -62,6 +62,9 @@ nothing needs to be done. only for Coursera students :)
 
 ## p5 - computer - tbd
 
-- [ ] Read the chapter from book
-- [ ] Build the Hack computer!
+- [x] Read the chapter from book
+- [x] Build the Hack computer!
+  - [x] Memory
+  - [x] CPU
+  - [ ] Computer
  
