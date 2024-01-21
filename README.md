@@ -60,11 +60,17 @@ nothing needs to be done. only for Coursera students :)
   - [x] mult (multiplication)
   - [x] fill (filling the screen)
 
-## p5 - computer - tbd
+## p5 - computer - done
 
 - [x] Read the chapter from book
 - [x] Build the Hack computer!
   - [x] Memory
   - [x] CPU
-  - [ ] Computer
- 
+  - [x] Computer
+
+## p6 - assembler - tbd
+
+- [ ] Read the chapter from book
+- [ ] Write and test the assembler
+  - [ ] v01: no symbolic references
+  - [ ] v02: with symbolic references
