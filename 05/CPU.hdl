@@ -55,14 +55,11 @@ CHIP CPU {
     Not(in=zr, out=notzr);
     Not(in=ng, out=notng);
     And(a=notzr, b=notng, out=pos);
-    Not(in=pos, out=notpos);
-    DMux8Way(in=instruction[15], sel=instruction[0..2], a=false, b=jgt, c=jeq, d=jge, e=jlt, f=jne, g=jle, h=jmp);
-    And(a=jgt, b=pos, out=jgtout);
-    And(a=jeq, b=zr, out=jeqout);
-    And(a=jge, b=notng, out=jgeout);
-    And(a=jlt, b=ng, out=jltout);
-    And(a=jne, b=notzr, out=jneout);
-    And(a=jle, b=notpos, out=jleout);
-    Or8Way(in[0]=jgtout, in[1]=jeqout, in[2]=jgeout, in[3]=jltout, in[4]=jneout, in[5]=jleout, in[6]=jmp, in[7]=false, out=jump);
+    And(a=instruction[0], b=pos, out=jmp1); // positive?
+    And(a=instruction[1], b=zr, out=jmp2); // zero?
+    And(a=instruction[2], b=ng, out=jmp3); // negative?
+    Or(a=jmp1, b=jmp2, out=jmp4);
+    Or(a=jmp3, b=jmp4, out=jmp5);
+    And(a=instruction[15], b=jmp5, out=jump);
     PC(in=aregout, load=jump, inc=true, reset=reset, out[0..14]=pc);
 }
