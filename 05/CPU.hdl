@@ -32,5 +32,37 @@ CHIP CPU {
         pc[15];          // Address of next instruction
 
     PARTS:
-    //// Replace this comment with your code.
+    // Use built-in ARegister, DRegister and PC chips
+
+    // Updating the A register
+    Not(in=instruction[15], out=ains);
+    Mux16(a=aluout, b=instruction, sel=ains, out=aregin);
+    Or(a=ains, b=instruction[5], out=aregload);
+    ARegister(in=aregin, load=aregload, out=aregout, out[0..14]=addressM);
+
+    // Updating the D register
+    And(a=instruction[15], b=instruction[4], out=dregload);
+    DRegister(in=aluout, load=dregload, out=dregout);
+
+    // Running ALU
+    Mux16(a=aregout, b=inM, sel=instruction[12], out=aluin);
+    ALU(x=dregout, y=aluin, zx=instruction[11], nx=instruction[10], zy=instruction[9], ny=instruction[8], f=instruction[7], no=instruction[6], out=aluout, out=outM, zr=zr, ng=ng);
+
+    // Write in RAM or not
+    And(a=instruction[15], b=instruction[3], out=writeM);
+
+    // Program counter = jump logic
+    Not(in=zr, out=notzr);
+    Not(in=ng, out=notng);
+    And(a=notzr, b=notng, out=pos);
+    Not(in=pos, out=notpos);
+    DMux8Way(in=instruction[15], sel=instruction[0..2], a=false, b=jgt, c=jeq, d=jge, e=jlt, f=jne, g=jle, h=jmp);
+    And(a=jgt, b=pos, out=jgtout);
+    And(a=jeq, b=zr, out=jeqout);
+    And(a=jge, b=notng, out=jgeout);
+    And(a=jlt, b=ng, out=jltout);
+    And(a=jne, b=notzr, out=jneout);
+    And(a=jle, b=notpos, out=jleout);
+    Or8Way(in[0]=jgtout, in[1]=jeqout, in[2]=jgeout, in[3]=jltout, in[4]=jneout, in[5]=jleout, in[6]=jmp, in[7]=false, out=jump);
+    PC(in=aregout, load=jump, inc=true, reset=reset, out[0..14]=pc);
 }
