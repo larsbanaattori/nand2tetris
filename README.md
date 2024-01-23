@@ -70,7 +70,12 @@ nothing needs to be done. only for Coursera students :)
 
 ## p6 - assembler - tbd
 
-- [ ] Read the chapter from book
+- [x] Read the chapter from book
 - [ ] Write and test the assembler
   - [ ] v01: no symbolic references
+    - [x] Parser module
+    - [ ] Coder module
+      - [x] dest
+      - [ ] comp
+      - [ ] jump
   - [ ] v02: with symbolic references
