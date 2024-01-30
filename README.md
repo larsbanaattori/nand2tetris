@@ -72,11 +72,5 @@ nothing needs to be done. only for Coursera students :)
 
 - [x] Read the chapter from book
 - [ ] Write and test the assembler
-  - [ ] v01: no symbolic references
-    - [x] Parser module
-    - [x] Coder module
-      - [x] dest
-      - [x] comp
-      - [x] jump
-    - [ ] Main program
+  - [x] v01: no symbolic references
   - [ ] v02: with symbolic references

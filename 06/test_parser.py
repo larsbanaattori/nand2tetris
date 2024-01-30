@@ -1,4 +1,4 @@
-from parser import Parser
+from parse import Parser
 
 def test1() -> None:
 
