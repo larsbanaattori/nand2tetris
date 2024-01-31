@@ -68,9 +68,11 @@ nothing needs to be done. only for Coursera students :)
   - [x] CPU
   - [x] Computer
 
-## p6 - assembler - tbd
+## p6 - assembler - done
 
 - [x] Read the chapter from book
-- [ ] Write and test the assembler
+- [x] Write and test the assembler
   - [x] v01: no symbolic references
-  - [ ] v02: with symbolic references
+  - [x] v02: with symbolic references
+
+## p7 - tbd
