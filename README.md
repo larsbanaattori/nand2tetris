@@ -75,4 +75,10 @@ nothing needs to be done. only for Coursera students :)
   - [x] v01: no symbolic references
   - [x] v02: with symbolic references
 
-## p7 - tbd
+## p7 - virtual machine 1 - wip
+
+- [x] Read the chapter from book
+- [ ] Write and test the translator
+  - [x] parser
+  - [ ] codewriter
+  - [ ] vmtranslator
