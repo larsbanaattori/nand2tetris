@@ -78,7 +78,13 @@ nothing needs to be done. only for Coursera students :)
 ## p7 - virtual machine 1 - wip
 
 - [x] Read the chapter from book
-- [ ] Write and test the translator
+- [x] Write and the translator
   - [x] parser
-  - [ ] codewriter
-  - [ ] vmtranslator
+  - [x] codewriter
+  - [x] vmtranslator
+- [ ] Test the translator
+  - [x] SimpleAdd
+  - [x] StackTest
+  - [ ] BasicTest **doesn't work**
+  - [ ] PointerTest
+  - [ ] StaticTest
