@@ -67,7 +67,7 @@ class CodeWriter:
             elif segment == "constant":
                 self.__write([f"@{index}"])
             elif segment == "static":
-                self.__write([f"@{self.filename+'.'+str(index)}"])
+                self.__write([f"@{self.filename.split('/')[-1].replace('.asm', '')+'.'+str(index)}"])
             else:
                 raise ValueError(f"segment type {segment}")
             
@@ -81,9 +81,9 @@ class CodeWriter:
             self.__write(["@SP", "A=M", "M=D"])
             self.__write(["@SP", "M=M+1"])
         elif command == "C_POP":
-            self.__write(["@SP", "AM=M-1", "D=M"])
             set_address()
-            self.__write(["M=D"])
+            self.__write(["D=A", "@R13", "M=D"]) # R13 = address where to pop the value
+            self.__write(["@SP", "AM=M-1", "D=M", "@R13", "A=M", "M=D"])
         else:
             raise ValueError(f"command {command}")
 

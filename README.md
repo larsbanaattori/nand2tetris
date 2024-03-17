@@ -75,16 +75,18 @@ nothing needs to be done. only for Coursera students :)
   - [x] v01: no symbolic references
   - [x] v02: with symbolic references
 
-## p7 - virtual machine 1 - wip
+## p7 - virtual machine 1
 
 - [x] Read the chapter from book
 - [x] Write and the translator
   - [x] parser
   - [x] codewriter
   - [x] vmtranslator
-- [ ] Test the translator
+- [x] Test the translator
   - [x] SimpleAdd
   - [x] StackTest
-  - [ ] BasicTest **doesn't work**
-  - [ ] PointerTest
-  - [ ] StaticTest
+  - [x] BasicTest
+  - [x] PointerTest
+  - [x] StaticTest
+
+## p8 - virtual machine 2 - todo
