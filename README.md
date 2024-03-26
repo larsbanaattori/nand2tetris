@@ -90,3 +90,16 @@ nothing needs to be done. only for Coursera students :)
   - [x] StaticTest
 
 ## p8 - virtual machine 2 - todo
+
+- [x] Read the chapter from book
+- [ ] Write the translator and test
+  - [x] v1: branching
+    - [x] BasicLoop
+    - [x] FibonacciSeries
+  - [ ] v2: function calls
+    - [ ] SimpleFunction
+    - [ ] NestedCall
+    - [ ] FibonacciElement
+    - [ ] StaticsTest
+
+## p9 - high-level language - todo
