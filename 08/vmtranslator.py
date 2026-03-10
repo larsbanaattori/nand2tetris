@@ -1,10 +1,11 @@
 import sys
+import os
 
 class Parser:
     def __init__(self, fn: str) -> None:
         with open(fn, "r") as f:
             ls = [l.strip() for l in f.readlines()]
-        ls = [l for l in ls if len(l) > 0 and l[0] != "/"]
+        ls = [l.split("/")[0].strip() for l in ls if len(l) > 0 and l[0] != "/"]
         ls.reverse()
         self.lines = ls
         self.curr_line = None
@@ -23,6 +24,12 @@ class Parser:
             return "C_PUSH"
         elif c.split()[0] == "pop":
             return "C_POP"
+        elif c.split()[0] == "label":
+            return "C_LABEL"
+        elif c.split()[0] == "goto":
+            return "C_GOTO"
+        elif c.split()[0] == "if-goto":
+            return "C_IF"
         else:
             return "C_UNKNOWN" # TODO: finish in nect chapter
         
@@ -36,15 +43,33 @@ class Parser:
         return int(self.curr_line.split()[2])
     
 
+"""
+CodeWriter is given two names:
+- pn = program name
+- fn (through setFileName) = name of current VM code file
+
+pn is used to name the .asm output file.
+
+fn is used to set names of functions, labels and static variables
+in the output .asm file.
+
+fn can be updated and has to be initialized through setFileName
+"""
+
 class CodeWriter:
-    def __init__(self, fn: str):
+    def __init__(self, pn: str):
+        self.pn = pn # path to which .asm output is written
+        self.fn = None # name of current .vm file being handled
+        self.f = None # the output file handle
+        self.label_n = 0 # counter for labels used in logical arithmetic
+        self.functionName = None # name of function being handled
+
+    def setFileName(self, fn: str) -> None:
+        fn = fn.replace("/", "").replace(".vm", "")
         self.fn = fn
-        self.fn_tail = (fn if "/" not in fn else fn.split("/")[-1]).split(".")[0]
-        self.f = None
-        self.label_n = 0
 
     def open(self) -> None:
-        self.f = open(self.fn, "w")
+        self.f = open(self.pn, "w")
 
     def close(self) -> None:
         if self.f is not None:
@@ -78,7 +103,7 @@ class CodeWriter:
         elif segment == "temp":
             self._write(f"@{5 + index}")
         elif segment == "static":
-            self._write(f"@{self.fn_tail}.{index}")
+            self._write(f"@{self.fn}.{index}")
         else:
             ValueError("Illegal segment type:", segment)
             
@@ -101,6 +126,13 @@ class CodeWriter:
         self._write("@SP")
         self._write("AM=M-1")
         self._write("D=M")
+
+    def _resolveLabel(self, label: str) -> str:
+        """maps given VM code label to ASM code label"""
+        if self.functionName is None:
+            return f"{self.fn}${label}"
+        else:
+            return f"{self.fn}.{self.functionName}${label}"
 
     def writeArithmetic(self, cmd: str) -> None:
         """Write given arithmetic command cmd to file"""
@@ -145,7 +177,6 @@ class CodeWriter:
         else:
             ValueError("Unknown arithmetic command:", cmd)
 
-    
     def writePushPop(self, cmd: str, segment: int, index: int) -> None:
         """Write command push/pop segment index to file"""
         if cmd == "C_PUSH":
@@ -168,20 +199,79 @@ class CodeWriter:
         else:
             ValueError("Forbidden input command type", cmd)
 
+    def writeLabel(self, label: str) -> None:
+        self._write(f"({self._resolveLabel(label)})")
+
+    def writeGoto(self, label: str) -> None:
+        self._write(f"@{self._resolveLabel(label)}")
+        self._write("0;JMP")
+
+    def writeIf(self, label: str) -> None:
+        # pop topmost value of stack to D
+        self._popSPtoD()
+        # jump to label if D != 0
+        self._write(f"@{self._resolveLabel(label)}")
+        self._write("D;JNE")
 
 if __name__ == "__main__":
-    fn = sys.argv[1].strip()
-    p = Parser(fn)
-    w = CodeWriter(fn.replace(".vm", ".asm"))
+    # get path containing the program
+    path = sys.argv[1].strip()
+
+    # is the program a multi-file one or not?
+    path_is_dir = (".vm" not in path)
+
+    # create list of files which we need to go through
+    if path_is_dir:
+        files = os.listdir(path)
+        file_names = [f for f in files if ".vm" in f]
+        prefix = path
+        if prefix[-1] != "/": prefix = prefix + "/"
+        file_paths = [prefix + f for f in file_names]
+    else:
+        file_names = [path.split("/")[-1]]
+        file_paths = [path]
+
+    # resolve the path of the output file
+    path_out = path
+    if path_out[-1] == "/": path_out = path_out[:-1]
+    path_out = path_out.replace(".vm", "")
+    path_out = path_out + ".asm"
+
+    # set up the writer 
+    w = CodeWriter(path_out)
     w.open()
-    while p.hasMoreLines():
-        p.advance()
-        w._write("// " + p.curr_line)
-        if p.commandType() == "C_ARITHMETIC":
-            w.writeArithmetic(p.arg1())
-        elif p.commandType() in ["C_PUSH", "C_POP"]:
-            w.writePushPop(p.commandType(), p.arg1(), p.arg2())
-        else:
-            print("Unknown command type", p.commandType())
-            exit(1)
+
+    # loop over files
+    for i in range(len(file_names)):
+        fn, fp = file_names[i], file_paths[i]
+        p = Parser(fp) # open the file being parsed
+        w.setFileName(fn) # tell writer the name of current file
+        # loop over lines in the file
+        w._write("// ***")
+        w._write("// source file: " + fn)
+        w._write("// ***")
+        while p.hasMoreLines():
+            p.advance()
+            cl = p.curr_line
+            if "/" in cl:
+                cl = cl.split("//")[0]
+            w._write("// " + cl)
+            if p.commandType() == "C_ARITHMETIC":
+                w.writeArithmetic(p.arg1())
+            elif p.commandType() in ["C_PUSH", "C_POP"]:
+                w.writePushPop(p.commandType(), p.arg1(), p.arg2())
+            elif p.commandType() == "C_LABEL":
+                w.writeLabel(p.arg1())
+            elif p.commandType() == "C_GOTO":
+                w.writeGoto(p.arg1())
+            elif p.commandType() == "C_IF":
+                w.writeIf(p.arg1())
+            else:
+                print("Unknown command type", p.commandType())
+                exit(1)
+    # write the end loop
+    w._write("// end loop")
+    w._write("(END)")
+    w._write("@END")
+    w._write("0;JMP")
     w.close()
