@@ -1,26 +1,26 @@
 # todo
 
-- [ ] modify `commandType` in `Parser` to identify control commands
+- [x] modify `commandType` in `Parser` to identify control commands
     - [x] `C_LABEL`
     - [x] `C_GOTO`
     - [x] `C_IF`
     - [x] `C_FUNCTION` *p2*
     - [x] `C_RETURN` *p2*
     - [x] `C_CALL` *p2*
-- [ ] modify `codeWriter` to translate control commands
+- [x] modify `codeWriter` to translate control commands
     - [x] `writeLabel`
     - [x] `writeGoto`
     - [x] `writeIf`
     - [x] `writeFunction` *p2*
     - [x] `writeReturn` *p2*
-    - [ ] `writeCall` *p2*
-- [ ] modify the parser loop to handle control commands
+    - [x] `writeCall` *p2*
+- [x] modify the parser loop to handle control commands
     - [x] `C_LABEL`
     - [x] `C_GOTO`
     - [x] `C_IF`
     - [x] `C_FUNCTION` *p2*
     - [x] `C_RETURN` *p2*
-    - [ ] `C_CALL` *p2*
+    - [x] `C_CALL` *p2*
 - [x] multi-file handling
     - [x] modify `codeWriter` to set filename
     - [x] make the main program loop over files
@@ -30,4 +30,7 @@
         - [x] BasicLoop
         - [x] FibonacciSeries
     - [ ] p2
-        - [ ] SimpleFunction (single file)
+        - [x] SimpleFunction (single file, single function, bootstrap provided by test script)
+        - [x] NestedCall (single file, multiple functions, bootstrap provided by test script)
+        - [ ] FibonacciElement
+        - [ ] StaticsTest
