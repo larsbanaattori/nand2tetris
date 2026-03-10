@@ -97,7 +97,7 @@ D=M
 A=M
 M=D
 // label LOOP
-(FibonacciSeries$LOOP)
+(LOOP)
 // push argument 0
 @ARG
 A=M
@@ -111,13 +111,13 @@ AM=M+1
 @SP
 AM=M-1
 D=M
-@FibonacciSeries$COMPUTE_ELEMENT
+@COMPUTE_ELEMENT
 D;JNE
 // goto END
-@FibonacciSeries$END
+@END
 0;JMP
 // label COMPUTE_ELEMENT
-(FibonacciSeries$COMPUTE_ELEMENT)
+(COMPUTE_ELEMENT)
 // push that 0
 @THAT
 A=M
@@ -225,11 +225,11 @@ D=M
 A=M
 M=D
 // goto LOOP
-@FibonacciSeries$LOOP
+@LOOP
 0;JMP
 // label END
-(FibonacciSeries$END)
-// end loop
 (END)
-@END
+// end loop
+(THE$END$LOOP)
+@THE$END$LOOP
 0;JMP

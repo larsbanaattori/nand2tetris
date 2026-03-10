@@ -4,22 +4,22 @@
     - [x] `C_LABEL`
     - [x] `C_GOTO`
     - [x] `C_IF`
-    - [ ] `C_FUNCTION` *p2*
-    - [ ] `C_RETURN` *p2*
-    - [ ] `C_CALL` *p2*
+    - [x] `C_FUNCTION` *p2*
+    - [x] `C_RETURN` *p2*
+    - [x] `C_CALL` *p2*
 - [ ] modify `codeWriter` to translate control commands
     - [x] `writeLabel`
     - [x] `writeGoto`
     - [x] `writeIf`
-    - [ ] `writeFunction` *p2*
+    - [x] `writeFunction` *p2*
+    - [x] `writeReturn` *p2*
     - [ ] `writeCall` *p2*
-    - [ ] `writeReturn` *p2*
 - [ ] modify the parser loop to handle control commands
     - [x] `C_LABEL`
     - [x] `C_GOTO`
     - [x] `C_IF`
-    - [ ] `C_FUNCTION` *p2*
-    - [ ] `C_RETURN` *p2*
+    - [x] `C_FUNCTION` *p2*
+    - [x] `C_RETURN` *p2*
     - [ ] `C_CALL` *p2*
 - [x] multi-file handling
     - [x] modify `codeWriter` to set filename
@@ -30,4 +30,4 @@
         - [x] BasicLoop
         - [x] FibonacciSeries
     - [ ] p2
-        - [ ] asd
+        - [ ] SimpleFunction (single file)

@@ -22,7 +22,7 @@ D=M
 A=M
 M=D
 // label LOOP
-(BasicLoop$LOOP)
+(LOOP)
 // push argument 0
 @ARG
 A=M
@@ -107,7 +107,7 @@ AM=M+1
 @SP
 AM=M-1
 D=M
-@BasicLoop$LOOP
+@LOOP
 D;JNE
 // push local 0
 @LCL
@@ -119,6 +119,6 @@ M=D
 @SP
 AM=M+1
 // end loop
-(END)
-@END
+(THE$END$LOOP)
+@THE$END$LOOP
 0;JMP

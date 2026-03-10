@@ -30,6 +30,12 @@ class Parser:
             return "C_GOTO"
         elif c.split()[0] == "if-goto":
             return "C_IF"
+        elif c.split()[0] == "function":
+            return "C_FUNCTION"
+        elif c.split()[0] == "return":
+            return "C_RETURN"
+        elif c.split()[0] == "call":
+            return "C_CALL"
         else:
             return "C_UNKNOWN" # TODO: finish in nect chapter
         
@@ -63,10 +69,15 @@ class CodeWriter:
         self.f = None # the output file handle
         self.label_n = 0 # counter for labels used in logical arithmetic
         self.functionName = None # name of function being handled
+        self.functionRetIndex = None # running count of return index in function
 
     def setFileName(self, fn: str) -> None:
         fn = fn.replace("/", "").replace(".vm", "")
         self.fn = fn
+
+    def _setFunctionName(self, fn: str) -> None:
+        self.functionName = fn
+        self.functionRetIndex = 0
 
     def open(self) -> None:
         self.f = open(self.pn, "w")
@@ -130,9 +141,9 @@ class CodeWriter:
     def _resolveLabel(self, label: str) -> str:
         """maps given VM code label to ASM code label"""
         if self.functionName is None:
-            return f"{self.fn}${label}"
+            return label
         else:
-            return f"{self.fn}.{self.functionName}${label}"
+            return self.functionName + "$" + label
 
     def writeArithmetic(self, cmd: str) -> None:
         """Write given arithmetic command cmd to file"""
@@ -213,6 +224,82 @@ class CodeWriter:
         self._write(f"@{self._resolveLabel(label)}")
         self._write("D;JNE")
 
+    def writeFunction(self, fName: str, nVars: int) -> None:
+        # inject function entry label
+        self._write(f"({fName})")
+        # push nVars zeros to stack
+        if nVars == 0: return
+        self._write("D=0")
+        for _ in range(nVars):
+            self._pushDtoSP()
+
+    def writeReturn(self) -> None:
+        # frame (temporary variable) = LCL  // save to R13
+        self._write("@LCL")
+        self._write("D=M")
+        self._write("@R13")
+        self._write("M=D")
+        # calculate retAddr = *(frame-5)    // save to R14
+        self._write("@5")
+        self._write("A=D-A")
+        self._write("D=M")
+        self._write("@R14")
+        self._write("M=D")
+        # *ARG = pop()          // return value to caller's stack
+        self._popSPtoD()
+        self._setA("argument", 0)
+        self._write("M=D")
+        # SP = ARG + 1          // repositions SP for caller
+        self._write("D=A+1")
+        self._write("@SP")
+        self._write("M=D")
+        # THAT = *(frame-1)     // restores THAT for caller
+        # THIS = *(frame-2)     // restores THIS for caller
+        # ARG = *(frame-3)      // restores ARG for the caller
+        # LCL = *(frame-4)      // restores LCL for the caller
+        for dest in ["THAT", "THIS", "ARG", "LCL"]:
+            self._write("@R13")
+            self._write("AM=M-1")
+            self._write("D=M")
+            self._write(f"@{dest}")
+            self._write("M=D")
+        # goto retAddr          // go to return address
+        self._write("@R14")
+        self._write("A=M")
+        self._write("0;JMP")
+
+    def writeCall(self, fName: str, nArgs: int) -> None:
+        # push retAddress label to stack
+        self._write(f"@{self.functionName}$ret.{self.functionRetIndex}")
+        self._write("D=A")
+        self._pushDtoSP()
+        # push LCL
+        # push ARG
+        # push THIS
+        # push THAT
+        for src in ["LCL", "ARG", "THIS", "THAT"]:
+            self._write(f"@{src}")
+            self._write("D=M")
+            self._pushDtoSP()
+        # ARG = SP - 5 - nArgs
+        self._write("@SP")
+        self._write("D=M")
+        self._write(f"@{5 + nArgs}")
+        self._write("D=D-A")
+        self._write("@ARG")
+        self._write("M=D")
+        # LCL = SP
+        self._write("@SP")
+        self._write("D=M")
+        self._write("@LCL")
+        self._write("M=D")
+        # goto f
+        self._write(f"@{fName}")
+        self._write("0;JMP")
+        # (returnAddress)
+        self._write(f"({self.functionName}$ret.{self.functionRetIndex})")
+        self.functionRetIndex += 1
+
 if __name__ == "__main__":
     # get path containing the program
     path = sys.argv[1].strip()
@@ -266,12 +353,19 @@ if __name__ == "__main__":
                 w.writeGoto(p.arg1())
             elif p.commandType() == "C_IF":
                 w.writeIf(p.arg1())
+            elif p.commandType() == "C_FUNCTION":
+                w.writeFunction(p.arg1(), int(p.arg2()))
+                w._setFunctionName(p.arg1())
+            elif p.commandType() == "C_RETURN":
+                w.writeReturn()
+            elif p.commandType() == "C_CALL":
+                w.writeCall(p.arg1(), int(p.arg2()))
             else:
                 print("Unknown command type", p.commandType())
                 exit(1)
     # write the end loop
     w._write("// end loop")
-    w._write("(END)")
-    w._write("@END")
+    w._write("(THE$END$LOOP)")
+    w._write("@THE$END$LOOP")
     w._write("0;JMP")
     w.close()
