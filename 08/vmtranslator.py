@@ -47,20 +47,7 @@ class Parser:
     
     def arg2(self) -> int:
         return int(self.curr_line.split()[2])
-    
 
-"""
-CodeWriter is given two names:
-- pn = program name
-- fn (through setFileName) = name of current VM code file
-
-pn is used to name the .asm output file.
-
-fn is used to set names of functions, labels and static variables
-in the output .asm file.
-
-fn can be updated and has to be initialized through setFileName
-"""
 
 class CodeWriter:
     def __init__(self, pn: str):
@@ -68,8 +55,18 @@ class CodeWriter:
         self.fn = None # name of current .vm file being handled
         self.f = None # the output file handle
         self.label_n = 0 # counter for labels used in logical arithmetic
-        self.functionName = None # name of function being handled
-        self.functionRetIndex = None # running count of return index in function
+        self.functionName = "bootstrap" # name of function being handled
+        self.functionRetIndex = 0 # running count of return index in function
+        self.open()
+        self._writeBootstrap()
+
+    def _writeBootstrap(self) -> None:
+        self._write("// bootstrapping code")
+        self._write("@256")
+        self._write("D=A")
+        self._write("@SP")
+        self._write("M=D")
+        self.writeCall("Sys.init", 0)
 
     def setFileName(self, fn: str) -> None:
         fn = fn.replace("/", "").replace(".vm", "")
@@ -326,7 +323,6 @@ if __name__ == "__main__":
 
     # set up the writer 
     w = CodeWriter(path_out)
-    w.open()
 
     # loop over files
     for i in range(len(file_names)):

@@ -1,5 +1,7 @@
 # todo
 
+All done and passed!
+
 - [x] modify `commandType` in `Parser` to identify control commands
     - [x] `C_LABEL`
     - [x] `C_GOTO`
@@ -24,13 +26,13 @@
 - [x] multi-file handling
     - [x] modify `codeWriter` to set filename
     - [x] make the main program loop over files
-- [ ] make the translator write bootstrapping code *p2*
-- [ ] tests
+- [x] make the translator write bootstrapping code *p2*
+- [x] tests
     - [x] p1
         - [x] BasicLoop
         - [x] FibonacciSeries
-    - [ ] p2
+    - [x] p2
         - [x] SimpleFunction (single file, single function, bootstrap provided by test script)
         - [x] NestedCall (single file, multiple functions, bootstrap provided by test script)
-        - [ ] FibonacciElement
-        - [ ] StaticsTest
+        - [x] FibonacciElement
+        - [x] StaticsTest
