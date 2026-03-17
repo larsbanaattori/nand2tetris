@@ -1,0 +1,27 @@
+//* Generates (pseudo)random uniform numbers. */
+class RandomUniform {
+
+    field int seed;
+
+    constructor RandomUniform new(int s) {
+        let seed = s;
+        return this;
+    }
+
+    method int next() {
+        let seed = (seed * 75) + 74;
+        if (seed < 0) {
+            let seed = seed & 32767;
+        }
+        return seed;
+    }
+
+    method int nextInt(int a, int b) {
+        var int range, raw, result;
+        let range = (b - a) + 1;
+        let raw = next();
+        let result = (raw - ((raw / range) * range)) + a;
+        return result;
+    }
+
+}

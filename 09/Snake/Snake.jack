@@ -1,0 +1,160 @@
+//* Represents the snake in the game. */
+class Snake {
+
+    field Cell head, tail;
+    field int direction;
+
+    constructor Snake new() {
+        let head = null;
+        let tail = null;
+        let direction = 2;
+        return this;
+    }
+
+    method void dispose() {
+        var Cell c, cc;
+        let c = tail;
+        while (~(c = null)) {
+            let cc = c.getParent();
+            do c.dispose();
+            let c = cc;
+        }
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    method void setDirection(int newDirection) {
+        if (~(Math.abs(direction - newDirection) = 2)) {
+            let direction = newDirection;
+        }
+        return;
+    }
+
+    method void addTail(int xx, int yy) {
+        let tail = Cell.new(xx, yy, tail);
+        return;
+    }
+
+    method void dropTail() {
+        var Cell oldTail;
+        let oldTail = tail;
+        let tail = tail.getParent();
+        do oldTail.hide();
+        do oldTail.dispose();
+        return;
+    }
+
+    method void addHead(int xx, int yy) {
+        var Cell newHead, oldHead;
+        let newHead = Cell.new(xx, yy, null);
+        let oldHead = head;
+        if (tail = null) {
+            let tail = newHead;
+        }
+        if (~(oldHead = null)) {
+            do oldHead.setParent(newHead);
+        }
+        let head = newHead;
+        return;
+    }
+
+    method void drawFull() {
+        //* draw the full snake */
+        var Cell c;
+        let c = tail;
+        while (~(c = null)) {
+            do c.show();
+            let c = c.getParent();
+        }
+        return;
+    }
+
+    method Cell getHead() {
+        return head;
+    }
+
+    method void hideFull() {
+        //* draw the full snake */
+        var Cell c;
+        let c = tail;
+        while (~(c = null)) {
+            do c.hide();
+            let c = c.getParent();
+        }
+        return;
+    }
+
+    method void move(int stepSize, boolean hitApple) {
+        var int x, y;
+        var Cell newHead;
+        var Cell oldTail;
+        // get position of current head
+        let x = head.getX();
+        let y = head.getY();
+        // update position according to direction
+        if (direction = 0) { let x = x - stepSize; }
+        else {
+            if (direction = 1) { let y = y - stepSize; }
+            else {
+                if (direction = 2) { let x = x + stepSize; }
+                else {
+                    if (direction = 3) { let y = y + stepSize; }
+                }
+            }
+        }
+        // set new head and draw it
+        do addHead(x, y);
+        do head.show();
+        // hide and remove old tail; update new tail
+        if (~hitApple) {
+            do dropTail();
+        }
+        return;
+    }
+
+    method boolean hitSelf() {
+        //* does the head of the snake hit itself? //
+        var Cell c;
+        let c = tail;
+        while (~(c = head) & ~(c = null)) {
+            if ((c.getX() = head.getX()) & (c.getY() = head.getY())) {
+                return true;
+            }
+            let c = c.getParent();
+        }
+        return false;
+    }
+
+    method boolean hitWall(int x_min, int x_max, int y_min, int y_max) {
+        var int x, y;
+        let x = head.getX();
+        let y = head.getY();
+        if ((x < x_min) | (x > x_max) | (y < y_min) | (y > y_max)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    method boolean hitXY(int x, int y) {
+        //* does the snake hit coordinates x, y? */
+        var Cell c;
+        let c = tail;
+        while (~(c = null)) {
+            if ((c.getX() = x) & (c.getY() = y)) {
+                return true;
+            }
+            let c = c.getParent();
+        }
+        return false;
+    }
+
+    method int headX() {
+        return head.getX();
+    }
+
+    method int headY() {
+        return head.getY();
+    }
+
+}

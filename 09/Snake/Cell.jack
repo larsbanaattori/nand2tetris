@@ -1,0 +1,65 @@
+//* Represents a part of the Snake */
+class Cell {
+
+    field int x, y;
+    field Cell parent;
+
+    static int pixelSize;
+    static int headerHeight;
+
+    constructor Cell new(int xx, int yy, Cell pp) {
+        let x = xx;
+        let y = yy;
+        let parent = pp;
+
+        let pixelSize = 8;
+        let headerHeight = 16;
+
+        return this;
+    }
+
+    method Cell getParent() {
+        return parent;
+    }
+
+    method void setParent(Cell pp) {
+        let parent = pp;
+        return;
+    }
+
+    method int getX() {
+        return x;
+    }
+
+    method int getY() {
+        return y;
+    }
+
+    method void setCoordinates(int xx, int yy) {
+        let x = xx;
+        let y = yy;
+        return;
+    }
+
+    method void draw() {
+        do Screen.drawRectangle(x, y, x + pixelSize - 1, y + pixelSize - 1);
+        return;
+    }
+
+    method void show() {
+        do Screen.setColor(true);
+        do draw();
+        return;
+    }
+
+    method void hide() {
+        do Screen.setColor(false);
+        do draw();
+        return;
+    }
+
+    method void dispose() {
+        do Memory.deAlloc(this);
+        return;
+    }
+}

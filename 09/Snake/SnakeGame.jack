@@ -1,0 +1,166 @@
+/** Represents a Snake game. */
+class SnakeGame {
+
+    static SnakeGame instance;  // A snake game
+    field Snake snake;          // snake
+    field Cell apple;           // apple
+    field int score;            // score
+    field boolean exit;         // game over?
+    field RandomUniform rnd;    // random number generator
+    field boolean hitApple;     // did snake just hit an apple?
+
+    // screen settings
+    static int screenWidth;
+    static int screenHeight;
+    static int headerHeight;
+    static int pixelSize;
+
+    /** Constructs a new Snake game. */
+    constructor SnakeGame new() {
+        
+        // set up screen settings
+        do Screen.clearScreen();
+        let screenWidth = 512;
+        let screenHeight = 256;
+        let headerHeight = 16;
+        let pixelSize = 8;
+        
+        // initiate the snake
+        let snake = Snake.new();
+        do snake.addHead(pixelSize * 20, headerHeight + (pixelSize * 10));
+        do snake.addTail(pixelSize * 19, headerHeight + (pixelSize * 10));
+        do snake.addTail(pixelSize * 18, headerHeight + (pixelSize * 10));
+        do snake.addTail(pixelSize * 17, headerHeight + (pixelSize * 10));
+        do snake.addTail(pixelSize * 16, headerHeight + (pixelSize * 10));
+        do snake.drawFull();
+        do snake.setDirection(2);
+
+        // sets up the rnd generator
+        let rnd = RandomUniform.new(42);
+        
+        // game status
+        let score = 0;
+        let exit = false;
+        let hitApple = false;
+
+        // set up the game UI
+        do drawWalls();
+        do Output.moveCursor(0, 0);
+        do Output.printString("Score:");
+        do drawScore();
+        do newApple();
+
+        return this;
+    }
+
+    /** Runs the game. */
+    method void run() {
+        var char key;
+        var int x_min, x_max, y_min, y_max;
+
+        while (~exit) {
+            // change direction of snake
+            let key = Keyboard.keyPressed();
+            if (key = 130) { do snake.setDirection(0); }
+            else {
+                if (key = 131) { do snake.setDirection(1); }
+                else {
+                    if (key = 132) { do snake.setDirection(2); }
+                    else {
+                        if (key = 133) { do snake.setDirection(3); }
+                        else {
+                            if (key = 113) { let exit = true; }
+                        }
+                    }
+                }
+            }
+            // move the snake
+            do snake.move(pixelSize, hitApple);
+            let hitApple = false;
+            // if snake hits itself --> game over!
+            if (snake.hitSelf()) {
+                let exit = true;
+            }
+            // if snake hits the wall --> game over!
+            let x_min = pixelSize;
+            let x_max = screenWidth - (pixelSize * 2);
+            let y_min = headerHeight + pixelSize;
+            let y_max = screenHeight - (pixelSize * 2);
+            if (snake.hitWall(x_min, x_max, y_min, y_max)) {
+                let exit = true;
+            }
+            // if snake eats the ball --> give points and set up a new ball
+            if (snake.hitXY(apple.getX(), apple.getY())) {
+                let score = score + 1;
+                do drawScore();
+                do newApple();
+                let hitApple = true;
+            }
+            // some lag
+            do Sys.wait(50);
+
+        }
+
+        if (exit) {
+            do Output.moveCursor(0, 14);
+            do Output.printString("Game over!");
+        }
+
+        return;
+    }
+
+    /** Deallocates the object's memory */
+    method void dispose() {
+        do snake.dispose();
+        //do ball.dispose();
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    method void newApple() {
+        var boolean exit;
+        var Cell old_apple;
+        var int x, y;
+        let exit = false;
+        while (~exit) {
+            let x = (1 + rnd.nextInt(0, 61)) * pixelSize;
+            let y = (3 + rnd.nextInt(0, 27)) * pixelSize;
+            if (~(snake.hitXY(x, y))) {
+                let exit = true;
+            }
+        }
+        let old_apple = apple;
+        if (~(old_apple = null)) {
+            do old_apple.dispose();
+        }
+        let apple = Cell.new(x, y, null);
+        do apple.show();
+        return;
+    }
+
+    /** Creates an instance of a Snake game. */
+    function void newInstance() {
+        let instance = SnakeGame.new();
+        return;
+    }
+
+    /** Returns this Snake game */
+    function SnakeGame getInstance() {
+        return instance;
+    }
+
+    /** Draws the walls of the game */
+    method void drawWalls() {
+        do Screen.drawRectangle(0, headerHeight, pixelSize - 1, screenHeight);
+        do Screen.drawRectangle(0, headerHeight, screenWidth, headerHeight + pixelSize - 1);
+        do Screen.drawRectangle(screenWidth - pixelSize, headerHeight, screenWidth, screenHeight);
+        do Screen.drawRectangle(0, screenHeight - pixelSize, screenWidth, screenHeight);
+        return;
+    }
+
+    method void drawScore() {
+        do Output.moveCursor(0, 7);
+        do Output.printInt(score);
+        return;
+    }
+}
